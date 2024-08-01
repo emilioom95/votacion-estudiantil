@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Candidato</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            margin-bottom: 5px;
+            display: block;
+            color: #666;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="file"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
+    <script>
+        function handleFormSubmit(event) {
+            event.preventDefault();  // Evita el comportamiento por defecto del formulario
+
+            var form = document.getElementById("candidatoForm");
+            var formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': form.querySelector('[name="csrfmiddlewaretoken"]').value,
+                    'X-Requested-With': 'XMLHttpRequest'  // Indica que es una solicitud AJAX
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Candidato añadido con éxito.');
+                    form.reset();  // Limpia los campos del formulario
+                } else {
+                    alert('Error al guardar.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al enviar el formulario.');
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Añadir Candidato</h2>
+        <form id="candidatoForm" method="post" enctype="multipart/form-data" action="{% url 'añadir_candidato' %}" onsubmit="handleFormSubmit(event)">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Guardar</button>
+        </form>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-secondary">Salir</button>
+        </form>
+    </div>
+</body>
+</html>
