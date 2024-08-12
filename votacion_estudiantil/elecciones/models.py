@@ -27,3 +27,7 @@ class Voto(models.Model):
 
     def __str__(self):
         return f"{self.usuario.username} votó por {self.candidato.nombre}"
+    
+class Resultado(models.Model):
+    candidato = models.ForeignKey(Candidato, on_delete=models.CASCADE)
+    votos = models.IntegerField(default=0)

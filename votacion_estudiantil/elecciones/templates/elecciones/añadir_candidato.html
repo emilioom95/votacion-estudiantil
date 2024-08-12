@@ -28,6 +28,7 @@
         h2 {
             text-align: center;
             color: #333;
+            margin-bottom: 20px;
         }
 
         form {
@@ -63,6 +64,8 @@
             border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            font-size: 16px;
+            margin-top: 10px;
         }
 
         button:hover {
@@ -76,10 +79,42 @@
         .btn-secondary:hover {
             background-color: #5a6268;
         }
+
+        .results-button,
+        .export-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .results-button {
+            color: #007BFF;
+            background-color: #f9f9f9;
+            border: 1px solid #007BFF;
+        }
+
+        .results-button:hover {
+            background-color: #e9ecef;
+        }
+
+        .export-button {
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+        }
+
+        .export-button:hover {
+            background-color: #0056b3;
+        }
     </style>
     <script>
         function handleFormSubmit(event) {
-            event.preventDefault();  // Evita el comportamiento por defecto del formulario
+            event.preventDefault();
 
             var form = document.getElementById("candidatoForm");
             var formData = new FormData(form);
@@ -89,14 +124,14 @@
                 body: formData,
                 headers: {
                     'X-CSRFToken': form.querySelector('[name="csrfmiddlewaretoken"]').value,
-                    'X-Requested-With': 'XMLHttpRequest'  // Indica que es una solicitud AJAX
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     alert('Candidato añadido con éxito.');
-                    form.reset();  // Limpia los campos del formulario
+                    form.reset();
                 } else {
                     alert('Error al guardar.');
                 }
@@ -119,6 +154,12 @@
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn-secondary">Salir</button>
+        </form>
+        <form action="{% url 'resultados' %}" method="get">
+            <button type="submit" class="results-button">Ver Resultados</button>
+        </form>
+        <form action="{% url 'exportar_resultados_pdf' %}" method="get">
+            <button type="submit" class="export-button">Exportar Resultados a PDF</button>
         </form>
     </div>
 </body>

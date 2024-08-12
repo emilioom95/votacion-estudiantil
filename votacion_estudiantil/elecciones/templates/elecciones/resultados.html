@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultados de la Votación</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #007BFF;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #007BFF;
+            color: #fff;
+        }
+        td {
+            background-color: #fff;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+        }
+        img {
+            border-radius: 50%;
+            max-width: 100px;
+            max-height: 100px;
+        }
+        .back-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            color: #007BFF;
+            background-color: #f9f9f9;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #e9ecef;
+        }
+        .no-results {
+            text-align: center;
+            font-size: 16px;
+            color: #6c757d;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Resultados de la Votación</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre del Candidato</th>
+                    <th>Foto</th>
+                    <th>Votos</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultado in resultados %}
+                <tr>
+                    <td>{{ resultado.candidato.nombre }}</td>
+                    <td><img src="{{ resultado.candidato.foto.url }}" alt="Foto de {{ resultado.candidato.nombre }}"></td>
+                    <td>{{ resultado.votos }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="no-results">No hay resultados disponibles.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form action="{% url 'inicio' %}" method="get">
+            <button type="submit" class="back-button">Finalizar</button>
+        </form>
+    </div>
+</body>
+</html>

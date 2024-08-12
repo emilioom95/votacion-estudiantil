@@ -58,7 +58,7 @@ ROOT_URLCONF = 'votacion_estudiantil.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'elecciones/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

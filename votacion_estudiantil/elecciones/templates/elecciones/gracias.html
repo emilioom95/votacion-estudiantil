@@ -45,6 +45,23 @@
         button:hover {
             background-color: #218838;
         }
+        .results-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            color: #007BFF;
+            background-color: #f9f9f9;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .results-button:hover {
+            background-color: #e9ecef;
+        }
     </style>
 </head>
 <body>
@@ -53,6 +70,10 @@
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
             <button type="submit">Finalizar</button>
+        </form>
+        <form action="{% url 'resultados' %}" method="get">
+            {% csrf_token %}
+            <button type="submit" class="results-button">Ver Resultados</button>
         </form>
     </div>
 </body>

@@ -7,6 +7,13 @@ from .models import Candidato, Voto
 from django.shortcuts import render
 from .forms import RegistroForm, CandidatoForm
 from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
+from .models import Resultado
+from django.template.loader import get_template 
+from django.db import models
+from django.db.models import Sum
 
 def inicio_view(request):
     return render(request, 'elecciones/inicio.html')
@@ -72,3 +79,39 @@ def añadir_candidato_view(request):
     else:
         form = CandidatoForm()
     return render(request, 'elecciones/añadir_candidato.html', {'form': form})
+
+def resultados_view(request):
+    candidatos = Candidato.objects.all()
+
+    resultados = []
+    for candidato in candidatos:
+        votos = candidato.voto_set.count()
+        resultados.append({
+            'candidato': candidato,
+            'votos': votos
+        })
+    
+    return render(request, 'elecciones/resultados.html', {'resultados': resultados})
+
+def exportar_resultados_pdf(request):
+    candidatos = Candidato.objects.all()
+    
+    resultados = []
+    for candidato in candidatos:
+        votos = candidato.voto_set.count()
+        resultados.append({
+            'candidato': candidato,
+            'votos': votos
+        })
+    
+    html_string = render_to_string('resultados_pdf.html', {'resultados': resultados})
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="resultados_votacion.pdf"'
+
+    pisa_status = pisa.CreatePDF(html_string, dest=response)
+
+    if pisa_status.err:
+        return HttpResponse("Error al generar el PDF.")
+
+    return response
